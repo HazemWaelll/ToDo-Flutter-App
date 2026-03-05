@@ -61,74 +61,93 @@ class _HomePageState extends State<HomePage> {
                 right: 16,
               ),
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 26),
-                  child: GestureDetector(
-                    onTap: () {
-                      editTask(index);
-                    },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        color: Colors.deepPurple,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: GestureDetector(
-                              child: Icon(
-                                tasks[index].completed
-                                    ? Icons.check_box
-                                    : Icons.check_box_outline_blank,
-                                color: Colors.white,
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  tasks[index].completed =
-                                      !tasks[index].completed;
-                                });
-                              },
+                return Dismissible(
+                  key: UniqueKey(),
+                  direction: DismissDirection.endToStart,
+                  onDismissed: (direction) {
+                    setState(() {
+                      tasks.removeAt(index);
+                    });
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 26),
+                    child: GestureDetector(
+                      onTap: () {
+                        editTask(index);
+                      },
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 70,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: Colors.deepPurple,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6,
+                              offset: Offset(0, 3),
                             ),
-                          ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8, right: 8),
-                              child: Text(
-                                tasks[index].title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  decoration: tasks[index].completed
-                                      ? TextDecoration.lineThrough
-                                      : null,
-                                  decorationColor: Colors.grey,
-                                  decorationThickness: 2,
-                                  color: tasks[index].completed
-                                      ? Colors.grey[400]
-                                      : Colors.white,
+                          ],
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: GestureDetector(
+                                child: Icon(
+                                  tasks[index].completed
+                                      ? Icons.check_box
+                                      : Icons.check_box_outline_blank,
+                                  color: Colors.white,
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    tasks[index].completed =
+                                        !tasks[index].completed;
+                                  });
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                ),
+                                child: Text(
+                                  tasks[index].title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    decoration: tasks[index].completed
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                                    decorationColor: Colors.grey,
+                                    decorationThickness: 2,
+                                    color: tasks[index].completed
+                                        ? Colors.grey[400]
+                                        : Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Transform.translate(
-                            offset: Offset(-8, 0),
-                            child: GestureDetector(
-                              onTap: () {
-                                removeTask(index);
-                              },
-                              child: Icon(
-                                Icons.cancel_outlined,
-                                color: Colors.white,
+                            Transform.translate(
+                              offset: Offset(-8, 0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  removeTask(index);
+                                },
+                                child: Icon(
+                                  Icons.cancel_outlined,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
