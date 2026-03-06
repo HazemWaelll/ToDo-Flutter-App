@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class Task {
   String title;
@@ -17,6 +18,36 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Task> tasks = [];
   String? userInput;
+  late Box _tasksBox;
+
+  @override
+  void initState() {
+    super.initState();
+    _tasksBox = Hive.box('tasksBox');
+    _loadTasks();
+  }
+
+  void _loadTasks() {
+    final List titles = _tasksBox.get('titles', defaultValue: []);
+    final List completed = _tasksBox.get('completed', defaultValue: []);
+    setState(() {
+      tasks = [];
+      for (int i = 0; i < titles.length; i++) {
+        tasks.add(Task(titles[i], completed[i]));
+      }
+    });
+  }
+
+  void _saveTasks() {
+    List<String> titles = [];
+    List<bool> completed = [];
+    for (int i = 0; i < tasks.length; i++) {
+      titles.add(tasks[i].title);
+      completed.add(tasks[i].completed);
+    }
+    _tasksBox.put('titles', titles);
+    _tasksBox.put('completed', completed);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,20 +67,13 @@ class _HomePageState extends State<HomePage> {
 
       body: tasks.isEmpty
           ? Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset("assets/todo.png", width: 300, height: 300),
-                  Text(
-                    "Tasks you add will appear here...",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                      fontSize: 20,
-                    ),
-                  ),
-                  SizedBox(height: MediaQuery.of(context).size.height / 7),
-                ],
+              child: Text(
+                "Tasks you add will appear here",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  fontSize: 20,
+                ),
               ),
             )
           : ListView.builder(
@@ -68,6 +92,7 @@ class _HomePageState extends State<HomePage> {
                     setState(() {
                       tasks.removeAt(index);
                     });
+                    _saveTasks();
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(bottom: 26),
@@ -107,6 +132,7 @@ class _HomePageState extends State<HomePage> {
                                     tasks[index].completed =
                                         !tasks[index].completed;
                                   });
+                                  _saveTasks();
                                 },
                               ),
                             ),
@@ -229,6 +255,7 @@ class _HomePageState extends State<HomePage> {
                           tasks.add(Task(userInput!, false));
                           userInput = null;
                         });
+                        _saveTasks();
                       }
                       Navigator.of(context).pop();
                     },
@@ -313,6 +340,7 @@ class _HomePageState extends State<HomePage> {
                         setState(() {
                           tasks[index].title = userInput!;
                         });
+                        _saveTasks();
                       }
                       Navigator.of(context).pop();
                       userInput = null;
@@ -381,6 +409,7 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         tasks.removeAt(index);
                       });
+                      _saveTasks();
                       Navigator.of(context).pop();
                     },
                     child: Text(
