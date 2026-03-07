@@ -12,16 +12,16 @@ class HiddenDrawer extends StatefulWidget {
 
 class _HiddenDrawerState extends State<HiddenDrawer> {
   List<ScreenHiddenDrawer> pages = [];
-
-  final drawerTextStyle = TextStyle(
-    fontWeight: FontWeight.bold,
-    color: Colors.white,
-    fontSize: 18,
-  );
+  late TextStyle drawerTextStyle;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    drawerTextStyle = TextStyle(
+      fontWeight: FontWeight.bold,
+      color: Theme.of(context).canvasColor,
+      fontSize: 18,
+    );
 
     pages = [
       ScreenHiddenDrawer(
@@ -29,7 +29,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
           name: 'To Do',
           baseStyle: drawerTextStyle,
           selectedStyle: drawerTextStyle,
-          colorLineSelected: Color.fromARGB(255, 171, 143, 250),
+          colorLineSelected: Theme.of(context).scaffoldBackgroundColor,
         ),
         HomePage(),
       ),
@@ -39,7 +39,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
           name: 'Settings',
           baseStyle: drawerTextStyle,
           selectedStyle: drawerTextStyle,
-          colorLineSelected: Color.fromARGB(255, 171, 143, 250),
+          colorLineSelected: Theme.of(context).scaffoldBackgroundColor,
         ),
         Settings(),
       ),
@@ -49,17 +49,17 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
   @override
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
-      backgroundColorMenu: Colors.deepPurple,
+      backgroundColorMenu: Theme.of(context).primaryColor,
       screens: pages,
       initPositionSelected: 0,
       slidePercent: 50,
       styleAutoTittleName: TextStyle(
         fontWeight: FontWeight.bold,
-        color: Colors.white,
+        color: Theme.of(context).canvasColor,
       ),
       isTitleCentered: true,
-      backgroundColorAppBar: Colors.deepPurple,
-      leadingAppBar: Icon(Icons.menu, color: Colors.white),
+      backgroundColorAppBar: Theme.of(context).primaryColor,
+      leadingAppBar: Icon(Icons.menu, color: Theme.of(context).canvasColor),
     );
   }
 }

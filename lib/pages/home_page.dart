@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _saveTasks() {
+  Future<void> _saveTasks() async {
     List<String> titles = [];
     List<bool> completed = [];
     for (int i = 0; i < tasks.length; i++) {
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 171, 143, 250),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       body: tasks.isEmpty
           ? Center(
@@ -60,7 +60,7 @@ class _HomePageState extends State<HomePage> {
                 "Tasks you add will appear here",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                  color: Theme.of(context).canvasColor,
                   fontSize: 20,
                 ),
               ),
@@ -94,10 +94,10 @@ class _HomePageState extends State<HomePage> {
                         height: 70,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(16),
-                          color: Colors.deepPurple,
+                          color: Theme.of(context).primaryColor,
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black26,
+                              color: Theme.of(context).shadowColor,
                               blurRadius: 6,
                               offset: Offset(0, 3),
                             ),
@@ -114,7 +114,7 @@ class _HomePageState extends State<HomePage> {
                                   tasks[index].completed
                                       ? Icons.check_box
                                       : Icons.check_box_outline_blank,
-                                  color: Colors.white,
+                                  color: Theme.of(context).canvasColor,
                                 ),
                                 onTap: () {
                                   setState(() {
@@ -137,6 +137,7 @@ class _HomePageState extends State<HomePage> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontWeight: FontWeight.bold,
+                                    fontSize: 16,
                                     decoration: tasks[index].completed
                                         ? TextDecoration.lineThrough
                                         : null,
@@ -144,7 +145,7 @@ class _HomePageState extends State<HomePage> {
                                     decorationThickness: 2,
                                     color: tasks[index].completed
                                         ? Colors.grey[400]
-                                        : Colors.white,
+                                        : Theme.of(context).canvasColor,
                                   ),
                                 ),
                               ),
@@ -157,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                                 },
                                 child: Icon(
                                   Icons.cancel_outlined,
-                                  color: Colors.white,
+                                  color: Theme.of(context).canvasColor,
                                 ),
                               ),
                             ),
@@ -172,10 +173,10 @@ class _HomePageState extends State<HomePage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: addTask,
-        backgroundColor: Colors.deepPurple,
+        backgroundColor: Theme.of(context).primaryColor,
         child: Icon(
           Icons.add,
-          color: Colors.white,
+          color: Theme.of(context).canvasColor,
           fontWeight: FontWeight.bold,
         ),
       ),
@@ -188,12 +189,12 @@ class _HomePageState extends State<HomePage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color.fromARGB(255, 197, 176, 255),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: Text(
             "Add Task",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.deepPurple[800],
+              color: Theme.of(context).secondaryHeaderColor,
             ),
           ),
           content: SingleChildScrollView(
@@ -201,6 +202,19 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 TextField(
                   autofocus: true,
+                  textCapitalization: TextCapitalization.sentences,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
+                  ),
+                  cursorColor: Theme.of(context).secondaryHeaderColor,
+                  decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).secondaryHeaderColor,
+                      ),
+                    ),
+                  ),
                   onChanged: (String value) {
                     userInput = value;
                   },
@@ -215,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.deepPurple,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: TextButton(
                     onPressed: () {
@@ -226,7 +240,7 @@ class _HomePageState extends State<HomePage> {
                       'Cancel',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).canvasColor,
                       ),
                     ),
                   ),
@@ -235,7 +249,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.deepPurple,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: TextButton(
                     onPressed: () {
@@ -252,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                       'Add',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).canvasColor,
                       ),
                     ),
                   ),
@@ -273,12 +287,12 @@ class _HomePageState extends State<HomePage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color.fromARGB(255, 197, 176, 255),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: Text(
             "Edit Task",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.deepPurple[800],
+              color: Theme.of(context).secondaryHeaderColor,
             ),
           ),
           content: SingleChildScrollView(
@@ -287,6 +301,17 @@ class _HomePageState extends State<HomePage> {
                 TextField(
                   autofocus: true,
                   controller: controller,
+                  textCapitalization: TextCapitalization.sentences,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
+                  ),
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                  ),
                   onChanged: (String value) {
                     userInput = value;
                   },
@@ -301,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.deepPurple,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: TextButton(
                     onPressed: () {
@@ -312,7 +337,7 @@ class _HomePageState extends State<HomePage> {
                       'Cancel',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).canvasColor,
                       ),
                     ),
                   ),
@@ -321,7 +346,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.deepPurple,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: TextButton(
                     onPressed: () {
@@ -338,7 +363,7 @@ class _HomePageState extends State<HomePage> {
                       'Save',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).canvasColor,
                       ),
                     ),
                   ),
@@ -357,12 +382,12 @@ class _HomePageState extends State<HomePage> {
       barrierDismissible: false, // user must tap button!
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: const Color.fromARGB(255, 197, 176, 255),
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: Text(
             "Are you sure you want to delete this task ?",
             style: TextStyle(
               fontWeight: FontWeight.bold,
-              color: Colors.deepPurple[800],
+              color: Theme.of(context).secondaryHeaderColor,
             ),
           ),
           actions: <Widget>[
@@ -372,7 +397,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.deepPurple,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: TextButton(
                     onPressed: () {
@@ -382,7 +407,7 @@ class _HomePageState extends State<HomePage> {
                       'Cancel',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).canvasColor,
                       ),
                     ),
                   ),
@@ -391,7 +416,7 @@ class _HomePageState extends State<HomePage> {
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    color: Colors.deepPurple,
+                    color: Theme.of(context).primaryColor,
                   ),
                   child: TextButton(
                     onPressed: () {
@@ -405,7 +430,7 @@ class _HomePageState extends State<HomePage> {
                       'Remove',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                        color: Theme.of(context).canvasColor,
                       ),
                     ),
                   ),
