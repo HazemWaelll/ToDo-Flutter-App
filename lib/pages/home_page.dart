@@ -3,9 +3,10 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 class Task {
   String title;
+  String description;
   bool completed;
 
-  Task(this.title, this.completed);
+  Task(this.title, this.description, this.completed);
 }
 
 class HomePage extends StatefulWidget {
@@ -18,6 +19,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Task> tasks = [];
   String? userInput;
+  String? userDescription;
   late Box _tasksBox;
 
   @override
@@ -29,23 +31,30 @@ class _HomePageState extends State<HomePage> {
 
   void _loadTasks() {
     final List titles = _tasksBox.get('titles', defaultValue: []);
+    final List descriptions = _tasksBox.get('descriptions', defaultValue: []);
     final List completed = _tasksBox.get('completed', defaultValue: []);
+
     setState(() {
       tasks = [];
       for (int i = 0; i < titles.length; i++) {
-        tasks.add(Task(titles[i], completed[i]));
+        tasks.add(Task(titles[i], descriptions[i], completed[i]));
       }
     });
   }
 
   Future<void> _saveTasks() async {
     List<String> titles = [];
+    List<String> descriptions = [];
     List<bool> completed = [];
+
     for (int i = 0; i < tasks.length; i++) {
       titles.add(tasks[i].title);
+      descriptions.add(tasks[i].description);
       completed.add(tasks[i].completed);
     }
+
     _tasksBox.put('titles', titles);
+    _tasksBox.put('descriptions', descriptions);
     _tasksBox.put('completed', completed);
   }
 
@@ -209,6 +218,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                   cursorColor: Theme.of(context).secondaryHeaderColor,
                   decoration: InputDecoration(
+                    hintText: "Title",
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Theme.of(context).secondaryHeaderColor,
@@ -217,6 +227,27 @@ class _HomePageState extends State<HomePage> {
                   ),
                   onChanged: (String value) {
                     userInput = value;
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  textCapitalization: TextCapitalization.sentences,
+                  maxLines: 3,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
+                  ),
+                  cursorColor: Theme.of(context).secondaryHeaderColor,
+                  decoration: InputDecoration(
+                    hintText: "Description (optional)",
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).secondaryHeaderColor,
+                      ),
+                    ),
+                  ),
+                  onChanged: (String value) {
+                    userDescription = value;
                   },
                 ),
               ],
@@ -235,6 +266,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                       userInput = null;
+                      userDescription = null;
                     },
                     child: Text(
                       'Cancel',
@@ -255,8 +287,11 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       if (userInput != null && userInput!.isNotEmpty) {
                         setState(() {
-                          tasks.add(Task(userInput!, false));
+                          tasks.add(
+                            Task(userInput!, userDescription ?? '', false),
+                          );
                           userInput = null;
+                          userDescription = null;
                         });
                         _saveTasks();
                       }
@@ -280,8 +315,14 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> editTask(int index) {
-    final controller = TextEditingController(text: tasks[index].title);
+    final titleController = TextEditingController(text: tasks[index].title);
+    final descriptionController = TextEditingController(
+      text: tasks[index].description,
+    );
+
     userInput = tasks[index].title;
+    userDescription = tasks[index].description;
+
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -300,7 +341,7 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 TextField(
                   autofocus: true,
-                  controller: controller,
+                  controller: titleController,
                   textCapitalization: TextCapitalization.sentences,
                   style: TextStyle(
                     fontSize: 16,
@@ -308,12 +349,33 @@ class _HomePageState extends State<HomePage> {
                   ),
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
+                    hintText: "Title",
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
                   ),
                   onChanged: (String value) {
                     userInput = value;
+                  },
+                ),
+                const SizedBox(height: 12),
+                TextField(
+                  controller: descriptionController,
+                  textCapitalization: TextCapitalization.sentences,
+                  maxLines: 3,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Theme.of(context).textTheme.titleLarge?.color,
+                  ),
+                  cursorColor: Colors.black,
+                  decoration: InputDecoration(
+                    hintText: "Description (optional)",
+                    focusedBorder: UnderlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black),
+                    ),
+                  ),
+                  onChanged: (String value) {
+                    userDescription = value;
                   },
                 ),
               ],
@@ -332,6 +394,7 @@ class _HomePageState extends State<HomePage> {
                     onPressed: () {
                       Navigator.of(context).pop();
                       userInput = null;
+                      userDescription = null;
                     },
                     child: Text(
                       'Cancel',
@@ -353,11 +416,13 @@ class _HomePageState extends State<HomePage> {
                       if (userInput != null && userInput!.isNotEmpty) {
                         setState(() {
                           tasks[index].title = userInput!;
+                          tasks[index].description = userDescription!;
                         });
                         _saveTasks();
                       }
                       Navigator.of(context).pop();
                       userInput = null;
+                      userDescription = null;
                     },
                     child: Text(
                       'Save',
