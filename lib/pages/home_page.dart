@@ -219,6 +219,9 @@ class _HomePageState extends State<HomePage> {
                   cursorColor: Theme.of(context).secondaryHeaderColor,
                   decoration: InputDecoration(
                     hintText: "Title",
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).textTheme.titleMedium?.color,
+                    ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Theme.of(context).secondaryHeaderColor,
@@ -240,6 +243,9 @@ class _HomePageState extends State<HomePage> {
                   cursorColor: Theme.of(context).secondaryHeaderColor,
                   decoration: InputDecoration(
                     hintText: "Description (optional)",
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).textTheme.titleMedium?.color,
+                    ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                         color: Theme.of(context).secondaryHeaderColor,
@@ -350,6 +356,9 @@ class _HomePageState extends State<HomePage> {
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
                     hintText: "Title",
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).textTheme.titleMedium?.color,
+                    ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),
@@ -370,6 +379,9 @@ class _HomePageState extends State<HomePage> {
                   cursorColor: Colors.black,
                   decoration: InputDecoration(
                     hintText: "Description (optional)",
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).textTheme.titleMedium?.color,
+                    ),
                     focusedBorder: UnderlineInputBorder(
                       borderSide: BorderSide(color: Colors.black),
                     ),

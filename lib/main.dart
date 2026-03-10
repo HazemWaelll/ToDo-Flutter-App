@@ -15,17 +15,23 @@ final Map<String, ThemeData> themesList = {
     canvasColor: Colors.black,
     hintColor: Colors.black,
     appBarTheme: AppBarTheme(toolbarHeight: 70),
-    textTheme: TextTheme(titleLarge: TextStyle(color: Colors.black)),
+    textTheme: TextTheme(
+      titleLarge: TextStyle(color: Colors.black),
+      titleMedium: TextStyle(color: Colors.grey[700]),
+    ),
   ),
   'dark': ThemeData(
-    scaffoldBackgroundColor: const Color.fromARGB(255, 27, 27, 27),
-    primaryColor: Colors.black,
+    scaffoldBackgroundColor: const Color.fromARGB(255, 48, 48, 48),
+    primaryColor: const Color.fromARGB(255, 28, 28, 28),
     secondaryHeaderColor: Colors.white,
     shadowColor: Colors.black26,
     canvasColor: Colors.white,
     hintColor: Colors.white,
     appBarTheme: AppBarTheme(toolbarHeight: 70),
-    textTheme: TextTheme(titleLarge: TextStyle(color: Colors.white)),
+    textTheme: TextTheme(
+      titleLarge: TextStyle(color: Colors.white),
+      titleMedium: TextStyle(color: Colors.grey[400]),
+    ),
   ),
   'purple': ThemeData(
     scaffoldBackgroundColor: const Color.fromARGB(255, 171, 143, 250),
@@ -35,7 +41,10 @@ final Map<String, ThemeData> themesList = {
     canvasColor: Colors.white,
     hintColor: Colors.white,
     appBarTheme: AppBarTheme(toolbarHeight: 70),
-    textTheme: TextTheme(titleLarge: TextStyle(color: Colors.black)),
+    textTheme: TextTheme(
+      titleLarge: TextStyle(color: Colors.black),
+      titleMedium: TextStyle(color: Colors.grey[850]),
+    ),
   ),
 };
 
