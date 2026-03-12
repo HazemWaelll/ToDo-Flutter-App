@@ -21,6 +21,8 @@ class _HomePageState extends State<HomePage> {
   String? userInput;
   String? userDescription;
   late Box _tasksBox;
+  int coolDownDelay = 4;
+  bool _isDeleteCooldown = false;
 
   @override
   void initState() {
@@ -58,37 +60,38 @@ class _HomePageState extends State<HomePage> {
     _tasksBox.put('completed', completed);
   }
 
+  final GlobalKey<ScaffoldMessengerState> _messengerKey =
+      GlobalKey<ScaffoldMessengerState>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+    return ScaffoldMessenger(
+      key: _messengerKey,
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
-      body: tasks.isEmpty
-          ? Center(
-              child: Text(
-                "Tasks you add will appear here",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).canvasColor,
-                  fontSize: 20,
+        body: tasks.isEmpty
+            ? Center(
+                child: Text(
+                  "Tasks you add will appear here",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).canvasColor,
+                    fontSize: 20,
+                  ),
                 ),
-              ),
-            )
-          : ListView.builder(
-              itemCount: tasks.length,
-              padding: EdgeInsets.only(
-                top: 26,
-                bottom: 16,
-                left: 16,
-                right: 16,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 26),
-                  child: GestureDetector(
-                    onTap: () {
-                      editTask(index);
-                    },
+              )
+            : ListView.builder(
+                itemCount: tasks.length,
+                padding: EdgeInsets.only(
+                  top: 26,
+                  bottom: 16,
+                  left: 16,
+                  right: 16,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 26),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: 70,
@@ -126,23 +129,32 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                           Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 8, right: 8),
-                              child: Text(
-                                tasks[index].title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                  decoration: tasks[index].completed
-                                      ? TextDecoration.lineThrough
-                                      : null,
-                                  decorationColor: Colors.grey,
-                                  decorationThickness: 2,
-                                  color: tasks[index].completed
-                                      ? Colors.grey[400]
-                                      : Theme.of(context).canvasColor,
+                            child: GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onTap: () {
+                                editTask(index);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 8,
+                                  right: 8,
+                                ),
+                                child: Text(
+                                  tasks[index].title,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                    decoration: tasks[index].completed
+                                        ? TextDecoration.lineThrough
+                                        : null,
+                                    decorationColor: Colors.grey,
+                                    decorationThickness: 2,
+                                    color: tasks[index].completed
+                                        ? Colors.grey[400]
+                                        : Theme.of(context).canvasColor,
+                                  ),
                                 ),
                               ),
                             ),
@@ -162,18 +174,18 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-                  ),
-                );
-              },
-            ),
+                  );
+                },
+              ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: addTask,
-        backgroundColor: Theme.of(context).primaryColor,
-        child: Icon(
-          Icons.add,
-          color: Theme.of(context).canvasColor,
-          fontWeight: FontWeight.bold,
+        floatingActionButton: FloatingActionButton(
+          onPressed: addTask,
+          backgroundColor: Theme.of(context).primaryColor,
+          child: Icon(
+            Icons.add,
+            color: Theme.of(context).canvasColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
     );
@@ -441,6 +453,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> removeTask(int index) {
+    if (_isDeleteCooldown) return Future.value();
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -448,7 +461,7 @@ class _HomePageState extends State<HomePage> {
         return AlertDialog(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: Text(
-            "Are you sure you want to delete this task ?",
+            "Are you sure you want to remove this task ?",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               color: Theme.of(context).secondaryHeaderColor,
@@ -484,11 +497,23 @@ class _HomePageState extends State<HomePage> {
                   ),
                   child: TextButton(
                     onPressed: () {
+                      final removedTask = tasks[index];
                       setState(() {
                         tasks.removeAt(index);
+                        _isDeleteCooldown = true;
                       });
                       _saveTasks();
                       Navigator.of(context).pop();
+                      _messengerKey.currentState?.showSnackBar(
+                        snackBarMessage(index, removedTask),
+                      );
+                      Future.delayed(Duration(seconds: coolDownDelay), () {
+                        if (mounted) {
+                          setState(() {
+                            _isDeleteCooldown = false;
+                          });
+                        }
+                      });
                     },
                     child: Text(
                       'Remove',
@@ -504,6 +529,33 @@ class _HomePageState extends State<HomePage> {
           ],
         );
       },
+    );
+  }
+
+  SnackBar snackBarMessage(int index, Task removedTask) {
+    return SnackBar(
+      duration: Duration(seconds: coolDownDelay),
+      behavior: SnackBarBehavior.floating,
+      margin: EdgeInsets.only(
+        bottom: MediaQuery.of(context).size.height / 11,
+        left: 16,
+        right: 16,
+      ),
+      content: Text(
+        "Task has been deleted",
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
+      action: SnackBarAction(
+        label: 'Undo',
+        onPressed: () {
+          setState(() {
+            final safeIndex = index.clamp(0, tasks.length);
+            tasks.insert(safeIndex, removedTask);
+            _isDeleteCooldown = false;
+          });
+          _saveTasks();
+        },
+      ),
     );
   }
 }
