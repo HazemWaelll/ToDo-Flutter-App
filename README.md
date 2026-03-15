@@ -13,9 +13,11 @@ A simple and clean to-do list app built with Flutter.
 
 ## Screenshots
 
-<img src="assets/Screenshots/screenshot_1.png" alt="Screenshot 1" width="250" style="margin-right: 16px;"/>
-<img src="assets/Screenshots/screenshot_2.png" alt="Screenshot 2" width="250" style="margin-right: 16px;"/>
-<img src="assets/Screenshots/screenshot_3.png" alt="Screenshot 3" width="250"/>
+<p align="center">
+   <img src="assets/Screenshots/screenshot_1.png" alt="Screenshot 1" width="32%"/>
+   <img src="assets/Screenshots/screenshot_2.png" alt="Screenshot 2" width="32%"/>
+   <img src="assets/Screenshots/screenshot_3.png" alt="Screenshot 3" width="32%"/>
+</p>
 
 ## Getting Started
 
