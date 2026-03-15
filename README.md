@@ -1,16 +1,45 @@
-# todolist_app
+# To-Do List App
 
-A new Flutter project.
+A simple and clean to-do list app built with Flutter.
+
+## Features
+
+- **Create tasks** with a title and description
+- **Mark tasks as completed** with a checkbox
+- **Delete tasks** with a cooldown to prevent accidental removal
+- **Persistent storage** using Hive (tasks and settings survive app restarts)
+- **Multiple themes** — Light, Dark, and Purple
+- **Hidden drawer navigation** between Home and Settings pages
+
+## Screenshots
+
+<img src="assets/Screenshots/screenshot_1.png" alt="Screenshot 1" width="250" style="margin-right: 16px;"/>
+<img src="assets/Screenshots/screenshot_2.png" alt="Screenshot 2" width="250" style="margin-right: 16px;"/>
+<img src="assets/Screenshots/screenshot_3.png" alt="Screenshot 3" width="250"/>
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+1. **Clone the repo**
+   ```bash
+   git clone <repo-url>
+   cd todolist_app
+   ```
+2. **Install dependencies**
+   ```bash
+   flutter pub get
+   ```
+3. **Run the app**
+   ```bash
+   flutter run
+   ```
 
-A few resources to get you started if this is your first Flutter project:
+## Project Structure
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```
+lib/
+├── main.dart              # App entry point, theme definitions
+└── pages/
+    ├── hidden_drawer.dart # Drawer navigation setup
+    ├── home_page.dart     # Task list (add, complete, delete)
+    └── settings.dart      # Theme selection
+```

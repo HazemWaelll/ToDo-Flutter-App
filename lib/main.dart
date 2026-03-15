@@ -19,10 +19,12 @@ final Map<String, ThemeData> themesList = {
       titleLarge: TextStyle(color: Colors.black),
       titleMedium: TextStyle(color: Colors.grey[700]),
     ),
+    splashColor: Colors.white,
+    focusColor: const Color.fromARGB(255, 217, 217, 217),
   ),
   'dark': ThemeData(
-    scaffoldBackgroundColor: const Color.fromARGB(255, 48, 48, 48),
-    primaryColor: const Color.fromARGB(255, 28, 28, 28),
+    scaffoldBackgroundColor: const Color.fromARGB(255, 36, 36, 36),
+    primaryColor: Colors.black,
     secondaryHeaderColor: Colors.white,
     shadowColor: Colors.black26,
     canvasColor: Colors.white,
@@ -32,6 +34,8 @@ final Map<String, ThemeData> themesList = {
       titleLarge: TextStyle(color: Colors.white),
       titleMedium: TextStyle(color: Colors.grey[400]),
     ),
+    splashColor: const Color.fromARGB(255, 36, 36, 36),
+    focusColor: Colors.white,
   ),
   'purple': ThemeData(
     scaffoldBackgroundColor: const Color.fromARGB(255, 171, 143, 250),
@@ -45,6 +49,8 @@ final Map<String, ThemeData> themesList = {
       titleLarge: TextStyle(color: Colors.black),
       titleMedium: TextStyle(color: Colors.grey[850]),
     ),
+    splashColor: Colors.deepPurple,
+    focusColor: const Color.fromARGB(255, 171, 143, 250),
   ),
 };
 

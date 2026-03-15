@@ -29,7 +29,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
           name: 'To Do',
           baseStyle: drawerTextStyle,
           selectedStyle: drawerTextStyle,
-          colorLineSelected: Theme.of(context).scaffoldBackgroundColor,
+          colorLineSelected: Theme.of(context).focusColor,
         ),
         HomePage(),
       ),
@@ -39,7 +39,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
           name: 'Settings',
           baseStyle: drawerTextStyle,
           selectedStyle: drawerTextStyle,
-          colorLineSelected: Theme.of(context).scaffoldBackgroundColor,
+          colorLineSelected: Theme.of(context).focusColor,
         ),
         Settings(),
       ),
@@ -49,7 +49,7 @@ class _HiddenDrawerState extends State<HiddenDrawer> {
   @override
   Widget build(BuildContext context) {
     return HiddenDrawerMenu(
-      backgroundColorMenu: Theme.of(context).primaryColor,
+      backgroundColorMenu: Theme.of(context).splashColor,
       screens: pages,
       initPositionSelected: 0,
       slidePercent: 50,

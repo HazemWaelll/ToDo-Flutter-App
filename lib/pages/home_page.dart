@@ -21,8 +21,7 @@ class _HomePageState extends State<HomePage> {
   String? userInput;
   String? userDescription;
   late Box _tasksBox;
-  int coolDownDelay = 4;
-  bool _isDeleteCooldown = false;
+  bool hasPendingDelete = false;
 
   @override
   void initState() {
@@ -60,6 +59,7 @@ class _HomePageState extends State<HomePage> {
     _tasksBox.put('completed', completed);
   }
 
+  // Key to ensure that the snack bar message appear only in home page NO other pages
   final GlobalKey<ScaffoldMessengerState> _messengerKey =
       GlobalKey<ScaffoldMessengerState>();
 
@@ -167,7 +167,9 @@ class _HomePageState extends State<HomePage> {
                               },
                               child: Icon(
                                 Icons.cancel_outlined,
-                                color: Theme.of(context).canvasColor,
+                                color: hasPendingDelete
+                                    ? Colors.grey[400]
+                                    : Theme.of(context).canvasColor,
                               ),
                             ),
                           ),
@@ -453,7 +455,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<void> removeTask(int index) {
-    if (_isDeleteCooldown) return Future.value();
+    if (hasPendingDelete) return Future.value();
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -500,17 +502,16 @@ class _HomePageState extends State<HomePage> {
                       final removedTask = tasks[index];
                       setState(() {
                         tasks.removeAt(index);
-                        _isDeleteCooldown = true;
+                        hasPendingDelete = true;
                       });
                       _saveTasks();
                       Navigator.of(context).pop();
-                      _messengerKey.currentState?.showSnackBar(
-                        snackBarMessage(index, removedTask),
-                      );
-                      Future.delayed(Duration(seconds: coolDownDelay), () {
+                      final snackBarController = _messengerKey.currentState
+                          ?.showSnackBar(snackBarMessage(index, removedTask));
+                      snackBarController?.closed.then((_) {
                         if (mounted) {
                           setState(() {
-                            _isDeleteCooldown = false;
+                            hasPendingDelete = false;
                           });
                         }
                       });
@@ -534,24 +535,20 @@ class _HomePageState extends State<HomePage> {
 
   SnackBar snackBarMessage(int index, Task removedTask) {
     return SnackBar(
-      duration: Duration(seconds: coolDownDelay),
+      duration: Duration(seconds: 4),
       behavior: SnackBarBehavior.floating,
-      margin: EdgeInsets.only(
-        bottom: MediaQuery.of(context).size.height / 11,
-        left: 16,
-        right: 16,
-      ),
+      margin: EdgeInsets.only(bottom: 20, left: 16, right: 16),
       content: Text(
         "Task has been deleted",
         style: TextStyle(fontWeight: FontWeight.bold),
       ),
       action: SnackBarAction(
-        label: 'Undo',
+        label: 'Undo?',
         onPressed: () {
           setState(() {
             final safeIndex = index.clamp(0, tasks.length);
             tasks.insert(safeIndex, removedTask);
-            _isDeleteCooldown = false;
+            hasPendingDelete = false;
           });
           _saveTasks();
         },
