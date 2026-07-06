@@ -76,6 +76,7 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
           title: Transform.translate(
             offset: Offset(-19, 0),
             child: TextField(
+              autofocus: true,
               controller: titleController,
               textCapitalization: TextCapitalization.sentences,
               style: TextStyle(
@@ -87,7 +88,7 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
               decoration: InputDecoration(
                 hintText: "Title",
                 hintStyle: TextStyle(
-                  color: Theme.of(context).textTheme.titleMedium?.color,
+                  color: Theme.of(context).textTheme.titleLarge?.color,
                   fontWeight: FontWeight.bold,
                   fontSize: 23,
                 ),
