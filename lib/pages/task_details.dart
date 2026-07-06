@@ -81,15 +81,13 @@ class _TaskDetailsPageState extends State<TaskDetailsPage> {
               textCapitalization: TextCapitalization.sentences,
               style: TextStyle(
                 color: Theme.of(context).textTheme.titleLarge?.color,
-                fontWeight: FontWeight.bold,
                 fontSize: 23,
               ),
               cursorColor: Theme.of(context).secondaryHeaderColor,
               decoration: InputDecoration(
-                hintText: "Title",
+                hintText: "Title (required)",
                 hintStyle: TextStyle(
                   color: Theme.of(context).textTheme.titleLarge?.color,
-                  fontWeight: FontWeight.bold,
                   fontSize: 23,
                 ),
                 border: InputBorder.none,
