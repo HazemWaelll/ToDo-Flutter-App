@@ -76,17 +76,19 @@ class _SettingsState extends State<Settings> {
                 Navigator.pop(context);
               },
             ),
-            ListTile(
-              title: Text('Dark Theme', style: BottomSheetTextStyle),
-              onTap: () {
-                thememode.value = 'dark';
-                Navigator.pop(context);
-              },
-            ),
+
             ListTile(
               title: Text('Purple Theme', style: BottomSheetTextStyle),
               onTap: () {
                 thememode.value = 'purple';
+                Navigator.pop(context);
+              },
+            ),
+
+            ListTile(
+              title: Text('peach pink Theme', style: BottomSheetTextStyle),
+              onTap: () {
+                thememode.value = 'peach pink';
                 Navigator.pop(context);
               },
             ),
