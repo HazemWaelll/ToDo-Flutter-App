@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
-import 'package:todolist_app/pages/hidden_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:todolist_app/pages/home_page.dart';
 
 final thememode = ValueNotifier<String>('light');
 late Box<dynamic> _themeBox;
@@ -40,7 +40,7 @@ final Map<String, ThemeData> themesList = {
   'peach pink': ThemeData(
     scaffoldBackgroundColor: const Color.fromARGB(255, 216, 146, 146),
     primaryColor: const Color.fromRGBO(255, 171, 171, 1),
-    secondaryHeaderColor: Colors.black,
+    secondaryHeaderColor: const Color.fromARGB(255, 171, 115, 115),
     shadowColor: Colors.black26,
     canvasColor: Colors.white,
     hintColor: Colors.white,
@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
         builder: (context, themevalue, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            home: HiddenDrawer(),
+            home: HomePage(),
             theme: themesList[themevalue],
           );
         },

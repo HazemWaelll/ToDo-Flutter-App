@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:todolist_app/pages/settings_page.dart';
 import 'package:todolist_app/pages/task_details.dart';
 
 class Task {
@@ -67,6 +68,37 @@ class _HomePageState extends State<HomePage> {
     return ScaffoldMessenger(
       key: _messengerKey,
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          centerTitle: true,
+          title: Text(
+            "ToDo",
+            style: TextStyle(
+              color: Theme.of(context).canvasColor,
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+            ),
+          ),
+
+          actions: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 25),
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SettingsPage()),
+                  );
+                },
+                child: Icon(
+                  Icons.settings,
+                  color: Theme.of(context).canvasColor,
+                ),
+              ),
+            ),
+          ],
+        ),
+
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
         body: tasks.isEmpty

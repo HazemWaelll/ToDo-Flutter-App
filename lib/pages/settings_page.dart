@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:todolist_app/main.dart';
 
-class Settings extends StatefulWidget {
-  const Settings({super.key});
+class SettingsPage extends StatefulWidget {
+  const SettingsPage({super.key});
 
   @override
-  State<Settings> createState() => _SettingsState();
+  State<SettingsPage> createState() => _SettingsPageState();
 }
 
-class _SettingsState extends State<Settings> {
+class _SettingsPageState extends State<SettingsPage> {
   late var BottomSheetTextStyle;
   @override
   Widget build(BuildContext context) {
@@ -17,6 +17,21 @@ class _SettingsState extends State<Settings> {
       color: Theme.of(context).hintColor,
     );
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        centerTitle: true,
+        title: Text(
+          "Settings",
+          style: TextStyle(
+            color: Theme.of(context).canvasColor,
+            fontWeight: FontWeight.bold,
+            fontSize: 25,
+          ),
+        ),
+
+        leading: BackButton(color: Theme.of(context).canvasColor),
+      ),
+
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
 
       body: Padding(
